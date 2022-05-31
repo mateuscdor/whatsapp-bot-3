@@ -1,6 +1,7 @@
 import makeWASocket, {makeInMemoryStore, useSingleFileAuthState, proto, DisconnectReason, downloadMediaMessage, downloadContentFromMessage, DownloadableMessage, AnyMessageContent, WAMessage, WAMediaUpload} from "@adiwajshing/baileys";
 import Sticker, { StickerTypes } from "wa-sticker-formatter/dist";
 import { CommandHandler } from "./command/command_handler";
+import RandomImageCommand from "./command/random_image_command";
 import StickerCommand from "./command/sticker_command";
 import { prefix as bot_prefix } from "./config";
 import { getMessageBody } from "./utils/message";
@@ -24,7 +25,7 @@ function registerListeners() {
             const body = getMessageBody(message);
             if (!body?.startsWith(bot_prefix)) return;
 
-            const command_text = body.substring(bot_prefix.length);
+            const command_text = body.substring(bot_prefix.length).toLowerCase();
             console.log(command_text)
             const commands = commandHandler.findCommands(command_text);
             commandHandler.executeCommands(message, ...commands);
@@ -34,4 +35,5 @@ function registerListeners() {
 
 function registerCommands() {
     commandHandler.registerCommand(new StickerCommand())
+    commandHandler.registerCommand(new RandomImageCommand())
 }
