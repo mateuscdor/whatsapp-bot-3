@@ -6,9 +6,9 @@ import {
 } from "@adiwajshing/baileys";
 import Sticker, { StickerTypes } from "wa-sticker-formatter/dist";
 import { getMessageMediaBuffer } from "../utils/media_utils";
-import {Command} from "./command";
+import {ICommand} from "./command";
 
-export default class StickerCommand implements Command {
+export default class StickerCommand implements ICommand {
   command: string = "sticker";
   async execute(client: WASocket, message: proto.IWebMessageInfo) {
     const messageMediaBuffer = await getMessageMediaBuffer(message);

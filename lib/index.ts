@@ -4,6 +4,7 @@ import { CommandHandler } from "./command/command_handler";
 import RandomImageCommand from "./command/random_image_command";
 import StickerCommand from "./command/sticker_command";
 import { prefix as bot_prefix } from "./config";
+import { ListenerHandler } from "./listener/listener_handler";
 import { getMessageBody } from "./utils/message";
 import { WhatsAppBot } from "./whatsapp_bot";
 const {Boom} = require('@hapi/boom');
@@ -16,19 +17,16 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 whatsappBot.start();
 registerListeners();
 
-const commandHandler = new CommandHandler(whatsappBot.client!);
+const listenerHandler = new ListenerHandler(whatsappBot.client!);
+const commandHandler = new CommandHandler(whatsappBot.client!, listenerHandler);
+
 registerCommands();
 
 function registerListeners() {
     whatsappBot.eventListener?.on('messages.upsert', async chats => {
         chats.messages.forEach(message => {
-            const body = getMessageBody(message);
-            if (!body?.startsWith(bot_prefix)) return;
-
-            const command_text = body.substring(bot_prefix.length).toLowerCase();
-            console.log(command_text)
-            const commands = commandHandler.findCommands(command_text);
-            commandHandler.executeCommands(message, ...commands);
+            const listeners = listenerHandler.findListeners(message);
+            listenerHandler.executeListeners(message, ...listeners);
         });
     })
 }
