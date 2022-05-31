@@ -20,6 +20,7 @@ export async function extractMessageMediaStream(message: proto.IWebMessageInfo) 
         "image"
       );
     } else if (message.message?.videoMessage) {
+      console.log(message.message?.videoMessage)
       return downloadContentFromMessage(
         message.message?.videoMessage as DownloadableMessage,
         "video"

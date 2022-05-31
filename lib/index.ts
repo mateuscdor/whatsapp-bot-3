@@ -7,8 +7,11 @@ import { getMessageBody } from "./utils/message";
 import { WhatsAppBot } from "./whatsapp_bot";
 const {Boom} = require('@hapi/boom');
 const P = require('pino');
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+const ffmpeg = require('fluent-ffmpeg');
 
 const whatsappBot: WhatsAppBot = new WhatsAppBot("./session");
+ffmpeg.setFfmpegPath(ffmpegPath);
 whatsappBot.start();
 registerListeners();
 
