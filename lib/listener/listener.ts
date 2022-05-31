@@ -18,7 +18,7 @@ export class Listener implements IListener {
     }
   
     filter(message: WAMessage): boolean {
-        return this.filter(message);
+        return this.filterer(message);
     }
 
     execute(client: WASocket, message: proto.IWebMessageInfo): void {

@@ -1,7 +1,7 @@
 import {proto, WASocket} from "@adiwajshing/baileys";
-import {ICommand} from "./command";
+import {ICommand} from "../command";
 import fs from "fs";
-import { getMessageBody } from "../utils/message";
+import { getMessageBody } from "../../utils/message_utils";
 
 export default class RandomImageCommand implements ICommand {
   command: string = "random";

@@ -5,8 +5,8 @@ import {
   WASocket,
 } from "@adiwajshing/baileys";
 import Sticker, { StickerTypes } from "wa-sticker-formatter/dist";
-import { getMessageMediaBuffer } from "../utils/media_utils";
-import {ICommand} from "./command";
+import { getMessageMediaBuffer } from "../../utils/media_utils";
+import { ICommand } from "../command";
 
 export default class StickerCommand implements ICommand {
   command: string = "sticker";
