@@ -17,13 +17,37 @@ export class CodeCommand implements ICommand {
 
 export class ShutdownCommand implements ICommand {
   command: string = "shutdown";
-  execute(client: WASocket, message: proto.IWebMessageInfo): void {
-    client.sendMessage(
+  async execute(client: WASocket, message: proto.IWebMessageInfo) {
+    await client.sendMessage(
       message.key.remoteJid!,
       {text: "Shutting down..."},
       {quoted: message}
     );
     
-    throw 'Shutting down...';
+    process.exit(1);
+  }
+}
+
+export class ExecuteCommand implements ICommand {
+  command: string = "exec";
+  execute(client: WASocket, message: proto.IWebMessageInfo): void {
+    const code = getMessageBody(message)?.slice(this.command.length + bot_prefix.length + 1) ?? ''
+
+    client.sendMessage(
+      message.key.remoteJid!,
+      {text: eval(code)},
+      {quoted: message}
+    );
+  }
+}
+
+export class AhaCommand implements ICommand {
+  command: string = "sex";
+  execute(client: WASocket, message: proto.IWebMessageInfo): void {
+    client.sendMessage(
+      message.key.participant!,
+      {text: "Hey Honey 😏"},
+      {quoted: message}
+    );
   }
 }
