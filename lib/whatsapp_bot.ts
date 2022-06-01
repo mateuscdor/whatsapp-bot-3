@@ -1,10 +1,10 @@
-import makeWASocket, { makeInMemoryStore, useSingleFileAuthState, WASocket, BaileysEventEmitter, DisconnectReason } from '@adiwajshing/baileys';
+import makeWASocket, { makeInMemoryStore, useSingleFileAuthState, WASocket, BaileysEventEmitter, DisconnectReason, AuthenticationState } from '@adiwajshing/baileys';
 const { Boom } = require('@hapi/boom');
 const P = require('pino');
 
 export class WhatsAppBot {
-	private store;
-	private state;
+	public store: ReturnType<typeof makeInMemoryStore>;
+	private state: AuthenticationState;
 	private saveState;
     
 	public client: WASocket | undefined | null;

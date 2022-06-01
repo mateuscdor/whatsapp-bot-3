@@ -19,7 +19,7 @@ export default class EveryoneTaggerListener implements IListener {
     client.sendMessage(
       message.key.remoteJid!,
       {
-        text: `${group.subject}\nEveryone!`,
+        text: `${group.subject}\nEveryone!\n${mentions.map(mention => `@${mention.split("@")[0]}`).join(" ")}`,
         mentions: mentions,
       },
       {quoted: message}

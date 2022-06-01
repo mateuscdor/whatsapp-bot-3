@@ -1,18 +1,17 @@
-import {CommandHandler} from "./command/core/command_handler";
+import { CommandHandler } from "./command/core/command_handler";
 import RandomImageCommand from "./command/random_image_command";
-import {ListenerHandler} from "./listener/core/listener_handler";
-import {getMessageBody} from "./utils/message_utils";
-import {WhatsAppBot} from "./whatsapp_bot";
+import { ListenerHandler } from "./listener/core/listener_handler";
+import { getMessageBody } from "./utils/message_utils";
+import { WhatsAppBot } from "./whatsapp_bot";
 import StickerCommand from "./command/sticker_command";
-import {Listener} from "./listener/core/listener";
-import {CodeCommand} from "./command/util_commands";
-import {generateMessageID, generateWAMessage, generateWAMessageFromContent, processSenderKeyMessage, proto} from "@adiwajshing/baileys";
+import { CodeCommand, ShutdownCommand } from "./command/util_commands";
 import TestCommand from "./command/test_command";
 import EveryoneTaggerListener from "./listener/everyone_tagger_listener";
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
-const ffmpeg = require("fluent-ffmpeg");
+import ffmpeg from "fluent-ffmpeg";
+import MusicCommand from "./command/music_command";
 
-const whatsappBot: WhatsAppBot = new WhatsAppBot("./session");
+export const whatsappBot: WhatsAppBot = new WhatsAppBot("./session");
 ffmpeg.setFfmpegPath(ffmpegPath);
 whatsappBot.start();
 registerEventHandlers();
@@ -26,6 +25,10 @@ registerListeners();
 function registerEventHandlers() {
   whatsappBot.eventListener?.on("messages.upsert", async (chats) => {
     chats.messages.forEach((message) => {
+      if (message?.key?.participant?.includes(":")) {
+        message.key.participant = message.key.participant.split(":")[0] + '@s.whatsapp.net';
+      }
+
       const listeners = listenerHandler.findListeners(message);
       listenerHandler.executeListeners(message, ...listeners);
     });
@@ -37,6 +40,8 @@ function registerCommands() {
   commandHandler.registerCommand(new RandomImageCommand());
   commandHandler.registerCommand(new CodeCommand());
   commandHandler.registerCommand(new TestCommand());
+  commandHandler.registerCommand(new MusicCommand());
+  commandHandler.registerCommand(new ShutdownCommand());
 }
 
 function registerListeners() {
@@ -48,7 +53,7 @@ function registerListeners() {
   //     (client, msg) =>
   //       client.sendMessage(
   //         msg.key.remoteJid!,
-  //         {text: "בחור טוב"},
+  //         {text: "חרמן מטונף"},
   //         {quoted: msg}
   //       )
   //   )
@@ -56,25 +61,8 @@ function registerListeners() {
 
   // listenerHandler.registerListener(
   //   new Listener(
-  //     (msg) => getMessageBody(msg)?.includes("עומרי גיל") ?? false,
-  //     (client, msg) => {
-  //       const id = generateMessageID();
-  //       const template = generateWAMessageFromContent(
-  //         msg.key.remoteJid!,
-  //         proto.Message.create({
-  //           conversation: "fdsfds",
-  //         }),
-  //         {userJid: msg.key.participant!}
-  //       );
-
-  //       console.log("relay");
-  //       processSenderKeyMessage
-  //       client.relayMessage(msg.key.remoteJid!, template.message!, {
-  //         participant: msg.key.participant!,
-  //         cachedGroupMetadata: (jid) => client.groupMetadata(jid),
-  //         messageId: id,
-  //       });
-  //     }
+  //     (msg) => getMessageBody(msg)?.includes("oldest message") ?? false,
+  //     async (client, msg) => {}
   //   )
   // );
 }

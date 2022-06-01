@@ -15,3 +15,15 @@ export class CodeCommand implements ICommand {
   }
 }
 
+export class ShutdownCommand implements ICommand {
+  command: string = "shutdown";
+  execute(client: WASocket, message: proto.IWebMessageInfo): void {
+    client.sendMessage(
+      message.key.remoteJid!,
+      {text: "Shutting down..."},
+      {quoted: message}
+    );
+    
+    throw 'Shutting down...';
+  }
+}
