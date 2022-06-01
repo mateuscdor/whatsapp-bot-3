@@ -46,7 +46,7 @@ export default class StickerCommand implements ICommand {
               pack: pack,
               author: author,
               type: StickerTypes.FULL,
-              quality: 40,
+              quality: 30,
           }
       );
   }

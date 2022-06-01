@@ -8,11 +8,22 @@ export default class RandomImageCommand implements ICommand {
   async execute(client: WASocket, message: proto.IWebMessageInfo) {
     const body = getMessageBody(message)?.toLowerCase() ?? '';
     const split = body.split(" ").slice(1).join('/');
-    const dir = fs.readdirSync("./images/" + split);
+    let dir;
+    let image;
+    try {
+     dir = fs.readdirSync("./images/" + split);
+     image = fs.readFileSync("./images/" + split + '/' + dir[Math.floor(Math.random() * dir.length)])
+    } catch {
+      return client.sendMessage(
+        message.key.remoteJid!,
+        {text: `There is no directory '${split}'\nValid options are: ${fs.readdirSync("./images")}`},
+        {quoted: message}
+      );
+    }
     
     await client.sendMessage(
         message.key.remoteJid!,
-        {image: fs.readFileSync("./images/" + split + '/' + dir[Math.floor(Math.random() * dir.length)])},
+        {image: image},
         {quoted: message}
       );
   }

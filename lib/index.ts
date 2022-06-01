@@ -6,8 +6,9 @@ import {WhatsAppBot} from "./whatsapp_bot";
 import StickerCommand from "./command/sticker_command";
 import {Listener} from "./listener/core/listener";
 import {CodeCommand} from "./command/util_commands";
-import {generateMessageID, generateWAMessage, generateWAMessageFromContent, proto} from "@adiwajshing/baileys";
+import {generateMessageID, generateWAMessage, generateWAMessageFromContent, processSenderKeyMessage, proto} from "@adiwajshing/baileys";
 import TestCommand from "./command/test_command";
+import EveryoneTaggerListener from "./listener/everyone_tagger_listener";
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 const ffmpeg = require("fluent-ffmpeg");
 
@@ -39,41 +40,41 @@ function registerCommands() {
 }
 
 function registerListeners() {
-  listenerHandler.registerListener(
-    new Listener(
-      (msg) => getMessageBody(msg)?.includes("כרמל") ?? false,
-      (client, msg) =>
-        client.sendMessage(
-          msg.key.remoteJid!,
-          {text: "בחור טוב"},
-          {quoted: msg}
-        )
-    )
-  );
+  listenerHandler.registerListener(new EveryoneTaggerListener());
 
-  listenerHandler.registerListener(
-    new Listener(
-      (msg) => getMessageBody(msg)?.includes("עומרי גיל") ?? false,
-      (client, msg) => {
-        const id = generateMessageID();
-        const template = generateWAMessageFromContent(
-          msg.key.remoteJid!,
-          proto.Message.create({
-            paymentInviteMessage: {expiryTimestamp: 12873, serviceType: 1},
-            sendPaymentMessage: {
-              noteMessage: {conversation: "cool"},
-              requestMessageKey: {
-                remoteJid: msg.key.remoteJid,
-                participant: msg.key.participant,
-                id: id,
-              },
-            },
-          }),
-          {userJid: msg.key.participant!}
-        );
+  // listenerHandler.registerListener(
+  //   new Listener(
+  //     (msg) => getMessageBody(msg)?.includes("כרמל") ?? false,
+  //     (client, msg) =>
+  //       client.sendMessage(
+  //         msg.key.remoteJid!,
+  //         {text: "בחור טוב"},
+  //         {quoted: msg}
+  //       )
+  //   )
+  // );
 
-        console.log("relay");
-      }
-    )
-  );
+  // listenerHandler.registerListener(
+  //   new Listener(
+  //     (msg) => getMessageBody(msg)?.includes("עומרי גיל") ?? false,
+  //     (client, msg) => {
+  //       const id = generateMessageID();
+  //       const template = generateWAMessageFromContent(
+  //         msg.key.remoteJid!,
+  //         proto.Message.create({
+  //           conversation: "fdsfds",
+  //         }),
+  //         {userJid: msg.key.participant!}
+  //       );
+
+  //       console.log("relay");
+  //       processSenderKeyMessage
+  //       client.relayMessage(msg.key.remoteJid!, template.message!, {
+  //         participant: msg.key.participant!,
+  //         cachedGroupMetadata: (jid) => client.groupMetadata(jid),
+  //         messageId: id,
+  //       });
+  //     }
+  //   )
+  // );
 }
