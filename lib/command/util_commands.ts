@@ -41,13 +41,3 @@ export class ExecuteCommand implements ICommand {
   }
 }
 
-export class AhaCommand implements ICommand {
-  command: string = "sex";
-  execute(client: WASocket, message: proto.IWebMessageInfo): void {
-    client.sendMessage(
-      message.key.participant!,
-      {text: "Hey Honey 😏"},
-      {quoted: message}
-    );
-  }
-}

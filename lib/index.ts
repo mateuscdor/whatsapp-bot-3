@@ -4,13 +4,14 @@ import { ListenerHandler } from "./listener/core/listener_handler";
 import { getMessageBody } from "./utils/message_utils";
 import { WhatsAppBot } from "./whatsapp_bot";
 import StickerCommand from "./command/sticker_command";
-import { AhaCommand, CodeCommand, ExecuteCommand, ShutdownCommand } from "./command/util_commands";
+import { CodeCommand, ExecuteCommand, ShutdownCommand } from "./command/util_commands";
 import TestCommand from "./command/test_command";
 import EveryoneTaggerListener from "./listener/everyone_tagger_listener";
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 import ffmpeg from "fluent-ffmpeg";
 import MusicCommand from "./command/music_command";
 import HelpCommand from "./command/help_command";
+import SpoofCommand from "./command/spoof_command";
 
 export const whatsappBot: WhatsAppBot = new WhatsAppBot("./session");
 ffmpeg.setFfmpegPath(ffmpegPath);
@@ -26,8 +27,11 @@ registerListeners();
 function registerEventHandlers() {
   whatsappBot.eventListener?.on("messages.upsert", async (chats) => {
     chats.messages.forEach((message) => {
-      if (message?.key?.participant?.includes(":") || message?.key?.fromMe) {
-        message.key!.participant = message?.key!.participant!.split(":")[0] + '@s.whatsapp.net';
+      if (message?.key?.participant?.includes(":") ?? false) {
+        message.key!.participant = message?.key!.participant?.split(":")[0] + '@s.whatsapp.net';
+      }
+
+      if (message?.key?.fromMe) {
         message.key!.fromMe = false;
       }
 
@@ -49,7 +53,7 @@ function registerCommands() {
   commandHandler.registerCommand(new MusicCommand());
   commandHandler.registerCommand(new ShutdownCommand());
   commandHandler.registerCommand(new HelpCommand());
-  commandHandler.registerCommand(new AhaCommand());
+  commandHandler.registerCommand(new SpoofCommand());
   // commandHandler.registerCommand(new ExecuteCommand());
 }
 
