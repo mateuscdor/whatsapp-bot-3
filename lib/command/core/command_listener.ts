@@ -1,7 +1,7 @@
 import {proto, WASocket} from "@adiwajshing/baileys";
-import {prefix as bot_prefix} from "../config";
-import {IListener} from "../listener/listener";
-import {getMessageBody} from "../utils/message_utils";
+import {prefix as bot_prefix} from "../../config";
+import {IListener} from "../../listener/core/listener";
+import {getMessageBody} from "../../utils/message_utils";
 import {CommandHandler} from "./command_handler";
 
 export default class CommandListener implements IListener {

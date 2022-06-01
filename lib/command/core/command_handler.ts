@@ -1,5 +1,5 @@
 import {WAMessage, WASocket} from "@adiwajshing/baileys";
-import {ListenerHandler} from "../listener/listener_handler";
+import {ListenerHandler} from "../../listener/core/listener_handler";
 import {ICommand} from "./command";
 import CommandListener from "./command_listener";
 

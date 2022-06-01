@@ -1,26 +1,13 @@
-import makeWASocket, {
-  makeInMemoryStore,
-  useSingleFileAuthState,
-  proto,
-  DisconnectReason,
-  downloadMediaMessage,
-  downloadContentFromMessage,
-  DownloadableMessage,
-  AnyMessageContent,
-  WAMessage,
-  WAMediaUpload,
-} from "@adiwajshing/baileys";
-import Sticker, {StickerTypes} from "wa-sticker-formatter/dist";
-import {CommandHandler} from "./command/command_handler";
-import RandomImageCommand from "./command/commands/random_image_command";
-import {prefix as bot_prefix} from "./config";
-import {ListenerHandler} from "./listener/listener_handler";
+import {CommandHandler} from "./command/core/command_handler";
+import RandomImageCommand from "./command/random_image_command";
+import {ListenerHandler} from "./listener/core/listener_handler";
 import {getMessageBody} from "./utils/message_utils";
 import {WhatsAppBot} from "./whatsapp_bot";
-import StickerCommand from "./command/commands/sticker_command";
-import {Listener} from "./listener/listener";
-const {Boom} = require("@hapi/boom");
-const P = require("pino");
+import StickerCommand from "./command/sticker_command";
+import {Listener} from "./listener/core/listener";
+import {CodeCommand} from "./command/util_commands";
+import {generateMessageID, generateWAMessage, generateWAMessageFromContent, proto} from "@adiwajshing/baileys";
+import TestCommand from "./command/test_command";
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 const ffmpeg = require("fluent-ffmpeg");
 
@@ -47,6 +34,8 @@ function registerEventHandlers() {
 function registerCommands() {
   commandHandler.registerCommand(new StickerCommand());
   commandHandler.registerCommand(new RandomImageCommand());
+  commandHandler.registerCommand(new CodeCommand());
+  commandHandler.registerCommand(new TestCommand());
 }
 
 function registerListeners() {
@@ -64,11 +53,26 @@ function registerListeners() {
 
   listenerHandler.registerListener(
     new Listener(
-      (msg) => getMessageBody(msg)?.includes("עומרי") ?? false,
+      (msg) => getMessageBody(msg)?.includes("עומרי גיל") ?? false,
       (client, msg) => {
-        const quoted = new proto.WebMessageInfo(msg);
-        console.log(quoted);
-        client.sendMessage(msg.key.remoteJid!, {text: "דידי"}, {quoted: msg});
+        const id = generateMessageID();
+        const template = generateWAMessageFromContent(
+          msg.key.remoteJid!,
+          proto.Message.create({
+            paymentInviteMessage: {expiryTimestamp: 12873, serviceType: 1},
+            sendPaymentMessage: {
+              noteMessage: {conversation: "cool"},
+              requestMessageKey: {
+                remoteJid: msg.key.remoteJid,
+                participant: msg.key.participant,
+                id: id,
+              },
+            },
+          }),
+          {userJid: msg.key.participant!}
+        );
+
+        console.log("relay");
       }
     )
   );
