@@ -16,12 +16,12 @@ export default class StickerCommand implements ICommand {
 
     if (!messageMediaBuffer){
       const quoted = message.message?.extendedTextMessage?.contextInfo?.quotedMessage
-      messageMediaBuffer = await getMessageMediaBuffer(generateWAMessageFromContent(message.key.remoteJid!, quoted!, {userJid: message.participant!}));
+      if (quoted) messageMediaBuffer = await getMessageMediaBuffer(generateWAMessageFromContent(message.key.remoteJid!, quoted!, {userJid: message.participant!}));
       
       if (!messageMediaBuffer) {
         return await client.sendMessage(
           message.key.remoteJid!,
-          {text: "You must send a video, image or quote one along with the command."},
+          {text: "You must send a video, image, sticker or quote one along with the command."},
           {quoted: message}
         );
       }

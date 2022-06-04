@@ -24,5 +24,10 @@ export async function extractMessageMediaStream(message: proto.IWebMessageInfo) 
         message.message?.videoMessage as DownloadableMessage,
         "video"
       );
+    } else if (message.message?.stickerMessage) {
+      return downloadContentFromMessage(
+        message.message?.stickerMessage as DownloadableMessage,
+        "sticker"
+      )
     }
   }
