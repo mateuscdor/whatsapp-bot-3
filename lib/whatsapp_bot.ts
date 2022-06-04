@@ -1,6 +1,6 @@
 import makeWASocket, { makeInMemoryStore, useSingleFileAuthState, WASocket, BaileysEventEmitter, DisconnectReason, AuthenticationState } from '@adiwajshing/baileys';
-const { Boom } = require('@hapi/boom');
-const P = require('pino');
+import { Boom } from '@hapi/boom';
+import P from 'pino';
 
 export class WhatsAppBot {
 	public store: ReturnType<typeof makeInMemoryStore>;
@@ -32,7 +32,8 @@ export class WhatsAppBot {
 		this.client = makeWASocket({
 			logger: P({ level: 'fatal' }),
 			printQRInTerminal: true,
-			auth: this.state
+			auth: this.state,
+			browser: ["BOT", "Chrome", "4.0.0"]
 		});
 
 		this.store.bind(this.client.ev);
@@ -41,9 +42,11 @@ export class WhatsAppBot {
 
         this.eventListener.on('connection.update', (update) => {
             const { connection, lastDisconnect } = update
+			console.log(connection)
             if(connection === 'close') {
                 // reconnect if not logged out
                 if((new Boom(lastDisconnect?.error))?.output?.statusCode !== DisconnectReason.loggedOut) {
+					console.log('disconnected')
                     this.start()
                 } else {
                     // console.log('connection closed')
