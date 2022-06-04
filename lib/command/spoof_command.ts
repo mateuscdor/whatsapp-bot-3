@@ -25,7 +25,7 @@ export default class SpoofCommand implements ICommand {
         if (message.message!.extendedTextMessage) message.message!.extendedTextMessage!.text = quotes[0][1];
         message.message!.conversation = quotes[0][1];
 
-        await client.sendMessage(message.key.remoteJid!, {text: quotes[1][1] + "\n\n*~bot (spoofed message)*"}, {quoted: message})
+        await client.sendMessage(message.key.remoteJid!, {text: quotes[1][1]}, {quoted: message})
     }
 
     private async error(client: WASocket, message: proto.IWebMessageInfo) {
