@@ -7,7 +7,7 @@ export default class LeaveCommand extends ICommand {
         const groupMeta = await client.groupMetadata(message.key.remoteJid!);
 
         for (const participant of groupMeta.participants) {
-            if (participant.id == message.key.id && (participant.isAdmin || participant.isSuperAdmin)) {
+            if (participant.id == message.key.participant && (participant.isAdmin || participant.isSuperAdmin)) {
                 await client.sendMessage(message.key.remoteJid!, { text: "Leaving the group chat...\nPeace out ✌️" })
                 return await client.groupLeave(groupMeta.id);
             }
