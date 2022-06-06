@@ -12,6 +12,7 @@ import ffmpeg from "fluent-ffmpeg";
 import MusicCommand from "./command/music_command";
 import HelpCommand from "./command/help_command";
 import SpoofCommand from "./command/spoof_command";
+import JoinCommand from "./command/join_command";
 
 export const whatsappBot: WhatsAppBot = new WhatsAppBot("./session");
 ffmpeg.setFfmpegPath(ffmpegPath);
@@ -54,6 +55,7 @@ function registerCommands() {
   commandHandler.registerCommand(new ShutdownCommand());
   commandHandler.registerCommand(new HelpCommand());
   commandHandler.registerCommand(new SpoofCommand());
+  commandHandler.registerCommand(new JoinCommand());
   // commandHandler.registerCommand(new ExecuteCommand());
 }
 
