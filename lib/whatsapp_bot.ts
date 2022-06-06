@@ -33,7 +33,7 @@ export class WhatsAppBot {
 			logger: P({ level: 'fatal' }),
 			printQRInTerminal: true,
 			auth: this.state,
-			browser: ["BOT", "Chrome", "4.0.0"]
+			browser: ["LOCAL - BOT", "Chrome", "4.0.0"]
 		});
 
 		this.store.bind(this.client.ev);
