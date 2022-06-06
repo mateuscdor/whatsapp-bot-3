@@ -13,6 +13,7 @@ import MusicCommand from "./command/music_command";
 import HelpCommand from "./command/help_command";
 import SpoofCommand from "./command/spoof_command";
 import JoinCommand from "./command/join_command";
+import LeaveCommand from "./command/leave_gc_command";
 
 export const whatsappBot: WhatsAppBot = new WhatsAppBot("./session");
 ffmpeg.setFfmpegPath(ffmpegPath);
@@ -56,6 +57,7 @@ function registerCommands() {
   commandHandler.registerCommand(new HelpCommand());
   commandHandler.registerCommand(new SpoofCommand());
   commandHandler.registerCommand(new JoinCommand());
+  commandHandler.registerCommand(new LeaveCommand());
   // commandHandler.registerCommand(new ExecuteCommand());
 }
 
