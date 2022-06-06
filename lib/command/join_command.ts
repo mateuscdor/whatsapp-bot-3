@@ -21,7 +21,7 @@ import { getMessageBody } from "../utils/message_utils";
         try{
             const res = await client.groupAcceptInvite(code);
             client.sendMessage(message.key.remoteJid!, {text:"Joining the group..."}, {quoted: message})
-            client.sendMessage(res, {text: "**Disclaimer**\nThis bot is handled and managed by Ori Harel.\nAs such, he poses the ability to see the messages in this group chat.\nHe does not plan to but the possibility is there.\nIf you are not keen with this, please remove the bot.\nYou can remove the bot by having a group admin send:\n>>gtfo"})
+            client.sendMessage(res, {text: "**Disclaimer**\nThis bot is handled and managed by Ori Harel.\nAs such, he poses the ability to see the messages in this group chat.\nHe does not plan to but the possibility is there.\nIf you are not keen with this, please remove the bot.\n\nYou can remove the bot by having a group admin send:\n>>gtfo"})
 
         } catch (e) {
             client.sendMessage(message.key.remoteJid!, {text:"Failed to join group.\nUnauthorized."}, {quoted: message})
