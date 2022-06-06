@@ -20,6 +20,8 @@ export class ListenerHandler {
 
     public executeListeners(message: WAMessage, ...listeners: Array<IListener>) {
         listeners.forEach(listener => {
+            if (!listener.hasPermission(message)) return;
+
             listener.execute(this.client, message);
         });
     }

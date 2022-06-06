@@ -4,7 +4,7 @@ import {
 } from "@adiwajshing/baileys";
 import { ICommand } from "./core/command";
 
-export default class HelpCommand implements ICommand {
+export default class HelpCommand extends ICommand {
     command: string = "help";
     async execute(client: WASocket, message: proto.IWebMessageInfo) {
         let helpMessage = "*----- HELP ME I'M RETARDED ----*\n>>help - Sends this message\n>>music (song name) - Downloads the song from YouTube\n>>sticker - Send along with an image or video to create a sticker\n"

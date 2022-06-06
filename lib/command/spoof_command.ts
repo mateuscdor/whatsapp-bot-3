@@ -10,7 +10,7 @@ import { prefix as bot_prefix } from "../config";
 import { getMessageBody } from "../utils/message_utils";
 import { ICommand } from "./core/command";
 
-export default class SpoofCommand implements ICommand {
+export default class SpoofCommand extends ICommand {
     command: string = "spoof";
     async execute(client: WASocket, message: proto.IWebMessageInfo) {
         const body = getMessageBody(message)?.slice(bot_prefix.length + this.command.length + 1);

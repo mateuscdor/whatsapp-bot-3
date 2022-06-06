@@ -3,7 +3,7 @@ import {ICommand} from "./core/command";
 import fs from "fs";
 import { getMessageBody } from "../utils/message_utils";
 
-export default class RandomImageCommand implements ICommand {
+export default class RandomImageCommand extends ICommand {
   command: string = "random";
   async execute(client: WASocket, message: proto.IWebMessageInfo) {
     const body = getMessageBody(message)?.toLowerCase() ?? '';

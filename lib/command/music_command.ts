@@ -1,15 +1,15 @@
-import {proto, WAMediaUpload, WASocket} from "@adiwajshing/baileys";
-import {ICommand} from "./core/command";
+import { proto, WAMediaUpload, WASocket } from "@adiwajshing/baileys";
+import { ICommand } from "./core/command";
 import * as ytMusic from "node-youtube-music";
 import YoutubeMp3Downloader from "youtube-mp3-downloader";
-import {prefix as bot_prefix} from "../config";
+import { prefix as bot_prefix } from "../config";
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
-import {getMessageBody} from "../utils/message_utils";
+import { getMessageBody } from "../utils/message_utils";
 import yt from "yt-converter";
 import fs from "fs";
 import Ffmpeg from "fluent-ffmpeg";
 
-export default class MusicCommand implements ICommand {
+export default class MusicCommand extends ICommand {
   command: string = "music";
 
   async execute(client: WASocket, message: proto.IWebMessageInfo) {
@@ -33,7 +33,7 @@ export default class MusicCommand implements ICommand {
             ?.map((artist) => artist.name)
             ?.join(", ")} from YouTube...`,
         },
-        {quoted: message}
+        { quoted: message }
       );
 
       yt.convertAudio(
@@ -57,17 +57,19 @@ export default class MusicCommand implements ICommand {
         .audioCodec("libopus")
         .output(song + ".opus")
         .on("end", () => {
-          client.sendMessage(
-            message.key.remoteJid!,
-            {
-              audio: fs.readFileSync(song + ".opus") as WAMediaUpload,
-              fileName: music.title + ".opus",
-            },
-            {quoted: message}
-          ).then(id => {
-            fs.unlink(song, () => {})
-            fs.unlink(song + '.opus', () => {})
-          })
+          client
+            .sendMessage(
+              message.key.remoteJid!,
+              {
+                audio: fs.readFileSync(song + ".opus") as WAMediaUpload,
+                fileName: music.title + ".opus",
+              },
+              { quoted: message }
+            )
+            .then((id) => {
+              fs.unlink(song, () => {});
+              fs.unlink(song + ".opus", () => {});
+            });
         })
         .run();
     });

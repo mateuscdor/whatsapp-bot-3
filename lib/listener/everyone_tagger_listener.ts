@@ -6,7 +6,7 @@ import {
 import {getMessageBody} from "../utils/message_utils";
 import {IListener} from "./core/listener";
 
-export default class EveryoneTaggerListener implements IListener {
+export default class EveryoneTaggerListener extends IListener {
   filter(message: proto.IWebMessageInfo): boolean {
     const body = getMessageBody(message);
     return body?.includes("@everyone") ?? false;

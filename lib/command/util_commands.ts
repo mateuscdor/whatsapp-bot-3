@@ -4,7 +4,9 @@ import { prefix as bot_prefix } from "../config";
 import {getMessageBody} from "../utils/message_utils";
 import {ICommand} from "./core/command";
 
-export class CodeCommand implements ICommand {
+export class CodeCommand extends ICommand {
+  blacklist: string[] = [];
+  whitelist: string[] = [];
   command: string = "code";
   execute(client: WASocket, message: proto.IWebMessageInfo): void {
     client.sendMessage(
@@ -15,7 +17,9 @@ export class CodeCommand implements ICommand {
   }
 }
 
-export class ShutdownCommand implements ICommand {
+export class ShutdownCommand extends ICommand {
+  blacklist: string[] = [];
+  whitelist: string[] = [];
   command: string = "shutdown";
   async execute(client: WASocket, message: proto.IWebMessageInfo) {
     await client.sendMessage(
@@ -28,7 +32,9 @@ export class ShutdownCommand implements ICommand {
   }
 }
 
-export class ExecuteCommand implements ICommand {
+export class ExecuteCommand extends ICommand {
+  blacklist: string[] = [];
+  whitelist: string[] = [];
   command: string = "exec";
   execute(client: WASocket, message: proto.IWebMessageInfo): void {
     const code = getMessageBody(message)?.slice(this.command.length + bot_prefix.length + 1) ?? ''

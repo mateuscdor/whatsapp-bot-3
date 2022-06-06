@@ -1,12 +1,13 @@
-import {proto, WASocket} from "@adiwajshing/baileys";
-import {prefix as bot_prefix} from "../../config";
-import {IListener} from "../../listener/core/listener";
-import {getMessageBody} from "../../utils/message_utils";
-import {CommandHandler} from "./command_handler";
+import { proto, WASocket } from "@adiwajshing/baileys";
+import { prefix as bot_prefix } from "../../config";
+import { IListener } from "../../listener/core/listener";
+import { getMessageBody } from "../../utils/message_utils";
+import { CommandHandler } from "./command_handler";
 
-export default class CommandListener implements IListener {
+export default class CommandListener extends IListener {
   private commandHandler: CommandHandler;
   constructor(commandHandler: CommandHandler) {
+    super();
     this.commandHandler = commandHandler;
   }
 

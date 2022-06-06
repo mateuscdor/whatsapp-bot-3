@@ -40,6 +40,7 @@ export class CommandHandler {
 
   public executeCommands(message: WAMessage, ...commands: Array<ICommand>) {
     commands.forEach((command) => {
+      if (!command.hasPermission(message)) return;
       command.execute(this.client, message);
     });
   }
