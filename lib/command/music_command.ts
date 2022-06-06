@@ -54,24 +54,28 @@ export default class MusicCommand extends ICommand {
       );
     }).then(async (song) => {
       Ffmpeg(song)
-        .audioCodec("libopus")
-        .output(song + ".opus")
+        .withAudioCodec("libmp3lame")
+        .toFormat("mp3")
+        .output(song + ".mp3")
         .on("end", () => {
           client
             .sendMessage(
               message.key.remoteJid!,
               {
-                audio: fs.readFileSync(song + ".opus") as WAMediaUpload,
-                fileName: music.title + ".opus",
+                audio: fs.readFileSync(song + ".mp3") as WAMediaUpload,
+                fileName: music.title + ".mp3",
+                mimetype: "audio/mpeg",
               },
               { quoted: message }
             )
             .then((id) => {
               fs.unlink(song, () => {});
-              fs.unlink(song + ".opus", () => {});
+              fs.unlink(song + ".mp3", () => {});
             });
         })
         .run();
+
+      Ffmpeg(song).getAvailableFormats((co) => console.log(co));
     });
   }
 
