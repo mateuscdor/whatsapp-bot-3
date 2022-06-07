@@ -17,7 +17,7 @@ export default class MusicCommand extends ICommand {
       ) ?? "";
     const videos = await yt.search(query)
 
-    const video = videos[0];
+    const video = videos.filter((vid) => vid.duration_raw.lengh < 8);
 
 
     client.sendMessage(
@@ -30,8 +30,6 @@ export default class MusicCommand extends ICommand {
     const path = `./music/${video.title}.mp3`;
 
     try {
-      if (video.duration_raw.length > 7) return;
-
       ytdl.default(video.url).pipe(fs.createWriteStream(path)).addListener('finish', () => {
         Ffmpeg(path)
           .withAudioCodec("libmp3lame")
