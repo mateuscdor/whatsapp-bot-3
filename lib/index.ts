@@ -17,6 +17,7 @@ import LeaveCommand from "./command/leave_gc_command";
 import CloseGCCommand from "./command/group_utils/close_gc";
 import MakeGCCommand from "./command/group_utils/make_gc";
 import GoodBotListener from "./listener/good_bot";
+import LmgtfyCommand from "./command/lmgtfy_command";
 
 export const whatsappBot: WhatsAppBot = new WhatsAppBot("./session");
 ffmpeg.setFfmpegPath(ffmpegPath);
@@ -65,6 +66,7 @@ function registerCommands() {
   commandHandler.registerCommand(new LeaveCommand());
   commandHandler.registerCommand(new MakeGCCommand());
   commandHandler.registerCommand(new CloseGCCommand());
+  commandHandler.registerCommand(new LmgtfyCommand());
   // commandHandler.registerCommand(new ExecuteCommand());
 }
 
