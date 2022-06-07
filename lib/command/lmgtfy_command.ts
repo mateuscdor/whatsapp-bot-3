@@ -17,7 +17,7 @@ export default class LmgtfyCommand extends ICommand {
                 bot_prefix.length + this.command.length + 1
             ) ?? "";
 
-        const link = base_link + query + '&iie=1'
-        client.sendMessage(message.key.remoteJid!, {"text": "You couldn't Google that yourself huh?\n" + url.format(link)})
+        const link = url.format(base_link + query + '&iie=1')
+        client.sendMessage(message.key.remoteJid!, {text: "You couldn't Google that yourself huh?\n" + link, })
     }
 }
