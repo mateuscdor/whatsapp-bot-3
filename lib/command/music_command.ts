@@ -17,7 +17,7 @@ export default class MusicCommand extends ICommand {
       ) ?? "";
     const videos = await yt.search(query)
 
-    const video = videos.filter((vid) => vid.duration_raw.lengh < 8);
+    const video = videos.filter((vid) => vid.duration_raw.lengh < 8)[0];
 
 
     client.sendMessage(
