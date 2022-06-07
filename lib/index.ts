@@ -16,6 +16,7 @@ import JoinCommand from "./command/join_command";
 import LeaveCommand from "./command/leave_gc_command";
 import CloseGCCommand from "./command/group_utils/close_gc";
 import MakeGCCommand from "./command/group_utils/make_gc";
+import GoodBotListener from "./listener/good_bot";
 
 export const whatsappBot: WhatsAppBot = new WhatsAppBot("./session");
 ffmpeg.setFfmpegPath(ffmpegPath);
@@ -69,4 +70,5 @@ function registerCommands() {
 
 function registerListeners() {
   listenerHandler.registerListener(new EveryoneTaggerListener());
+  listenerHandler.registerListener(new GoodBotListener());
 }

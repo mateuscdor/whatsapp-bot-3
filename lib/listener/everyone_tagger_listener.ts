@@ -8,7 +8,7 @@ import {IListener} from "./core/listener";
 
 export default class EveryoneTaggerListener extends IListener {
   filter(message: proto.IWebMessageInfo): boolean {
-    const body = getMessageBody(message);
+    const body = getMessageBody(message)?.toLowerCase();
     return body?.includes("@everyone") ?? false;
   }
 
