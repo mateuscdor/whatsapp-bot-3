@@ -15,8 +15,8 @@
     "sharp": "^0.30.6",
     "typescript": "^4.7.2",
     "wa-sticker-formatter": "^4.3.2",
-    "youtube-mp3-downloader": "^0.7.10",
-    "yt-converter": "^1.2.1"
+    "youtube-search-without-api-key": "^1.0.7",
+    "ytdl-core": "^4.11.0"
   },
   "scripts": {
     "build": "tsc",

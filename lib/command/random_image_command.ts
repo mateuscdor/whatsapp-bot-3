@@ -16,7 +16,7 @@ export default class RandomImageCommand extends ICommand {
     } catch {
       return client.sendMessage(
         message.key.remoteJid!,
-        {text: `There is no directory '${split}'\nValid options are: ${fs.readdirSync("./images").join('\n')}`},
+        {text: `There is no directory '${split}'\nValid options are: ${fs.readdirSync("./images").join(', ')}`},
         {quoted: message}
       );
     }

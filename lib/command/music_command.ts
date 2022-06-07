@@ -1,13 +1,11 @@
 import { proto, WAMediaUpload, WASocket } from "@adiwajshing/baileys";
 import { ICommand } from "./core/command";
-import * as ytMusic from "node-youtube-music";
-import YoutubeMp3Downloader from "youtube-mp3-downloader";
 import { prefix as bot_prefix } from "../config";
-const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 import { getMessageBody } from "../utils/message_utils";
-import yt from "yt-converter";
 import fs from "fs";
 import Ffmpeg from "fluent-ffmpeg";
+import * as yt from 'youtube-search-without-api-key';
+import * as ytdl from 'ytdl-core';
 
 export default class MusicCommand extends ICommand {
   command: string = "music";
@@ -17,70 +15,55 @@ export default class MusicCommand extends ICommand {
       getMessageBody(message)?.slice(
         bot_prefix.length + this.command.length + 1
       ) ?? "";
-    const musics = await ytMusic.searchMusics(query);
+    const videos = await yt.search(query)
 
-    const music = musics[0];
+    const video = videos[0];
 
-    await new Promise<string>(async (resolve, reject) => {
-      const url = "https://www.youtube.com/watch?v=" + music.youtubeId!;
-      const info = await yt.getInfo(url);
-      let title = this.parserTitles(info.title);
 
-      client.sendMessage(
-        message.key.remoteJid!,
-        {
-          text: `Downloading song "${music.title}" by ${music.artists
-            ?.map((artist) => artist.name)
-            ?.join(", ")} from YouTube...`,
-        },
-        { quoted: message }
-      );
+    client.sendMessage(
+      message.key.remoteJid!,
+      {
+        text: `Downloading MP3 of "${video.title}" from YouTube...`,
+      },
+      { quoted: message }
+    );
+    const path = `./music/${video.title}.mp3`;
 
-      yt.convertAudio(
-        {
-          url: url,
-          itag: 140,
-          directoryDownload: "./music",
-        },
-        (data: string) => {},
-        (data: string | undefined) => {
-          title = title + ".mp3";
-          const path = `./music/${title}`;
-          if (fs.existsSync(path)) {
-            return resolve(path);
-          }
-          reject(data);
-        }
-      );
-    }).then(async (song) => {
-      Ffmpeg(song)
-        .withAudioCodec("libmp3lame")
-        .toFormat("mp3")
-        .output(song + ".mp3")
-        .on("end", () => {
-          client
-            .sendMessage(
-              message.key.remoteJid!,
-              {
-                audio: fs.readFileSync(song + ".mp3") as WAMediaUpload,
-                fileName: music.title + ".mp3",
-                mimetype: "audio/mpeg",
-              },
-              { quoted: message }
-            )
-            .then((id) => {
-              fs.unlink(song, () => {});
-              fs.unlink(song + ".mp3", () => {});
-            });
-        })
-        .run();
-
-      Ffmpeg(song).getAvailableFormats((co) => console.log(co));
-    });
+    try {
+      ytdl.default(video.url).pipe(fs.createWriteStream(path)).addListener('finish', () => {
+        Ffmpeg(path)
+          .withAudioCodec("libmp3lame")
+          .toFormat("mp3")
+          .output(path + ".mp3")
+          .on("end", () => {
+            client
+              .sendMessage(
+                message.key.remoteJid!,
+                {
+                  audio: fs.readFileSync(path + ".mp3") as WAMediaUpload,
+                  fileName: video.title + ".mp3",
+                  mimetype: "audio/mpeg",
+                },
+                { quoted: message }
+              )
+              .then((id) => {
+                fs.unlink(path, () => { });
+                fs.unlink(path + ".mp3", () => { });
+              });
+          })
+          .on('error', (err) => {
+            this.handleError(client, message, path);
+          })
+          .run();
+      });
+    } catch (err) {
+      this.handleError(client, message, path);
+    }
   }
 
-  private parserTitles(title: string) {
-    const regex = /[\\,:,?,|,¿,*,<,>,",/]/g;
-    return title.replace(regex, "");
+  private handleError(client, message, path: string) {
+    fs.unlink(path, () => { });
+    fs.unlink(path + ".mp3", () => { });
+    client.sendMessage(message.key.remoteJid!, { text: "Failed to download the MP3 of this video." }, {quoted: message})
   }
 }
