@@ -17,8 +17,16 @@ export default class MusicCommand extends ICommand {
       ) ?? "";
     const videos = await yt.search(query)
 
-    const video = videos.filter((vid) => vid.duration_raw.lengh < 8)[0];
-
+    const video = videos.filter((vid) => {
+      return (vid.duration_raw.length == 7 && vid.duration_raw[0] < 3) || vid.duration_raw.length < 7
+    })[0];
+    if (!video) return client.sendMessage(
+      message.key.remoteJid!,
+      {
+        text: `Failed to find video.`,
+      },
+      { quoted: message }
+    )
 
     client.sendMessage(
       message.key.remoteJid!,
