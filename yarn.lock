@@ -276,6 +276,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/vcf@^2.0.3":
+  "integrity" "sha512-T7FW77SvkTPAI5qEGpFHL9EAFgVaceDwLxAp+xgBxcZrhz6fTwf44LhYEUnJJeZ+EuKSJ8owQYKwlabYyVwJ8Q=="
+  "resolved" "https://registry.npmjs.org/@types/vcf/-/vcf-2.0.3.tgz"
+  "version" "2.0.3"
+  dependencies:
+    "@types/node" "*"
+
 "abort-controller@^3.0.0":
   "integrity" "sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg=="
   "resolved" "https://registry.npmjs.org/abort-controller/-/abort-controller-3.0.0.tgz"
@@ -1587,6 +1594,11 @@
   "integrity" "sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg=="
   "resolved" "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz"
   "version" "8.3.2"
+
+"vcard-parser@^1.0.0":
+  "integrity" "sha512-rSEjrjBK3of4VimMR5vBjLLcN5ZCSp9yuVzyx5i4Fwx74Yd0s+DnHtSit/wAAtj1a7/T/qQc0ykwXADoD0+fTQ=="
+  "resolved" "https://registry.npmjs.org/vcard-parser/-/vcard-parser-1.0.0.tgz"
+  "version" "1.0.0"
 
 "wa-sticker-formatter@^4.3.2":
   "integrity" "sha512-PGSHmIXn20yds3t1bbTXMw/rayjoiDI7XOuYr6b9ZuqKN0JWH75LtF2a/KXZ2ePfjDPTGOzkSH70JaAfEModeQ=="

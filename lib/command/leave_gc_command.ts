@@ -6,7 +6,6 @@ export default class LeaveCommand extends ICommand {
     async execute(client: WASocket, message: proto.IWebMessageInfo) {
         const groupMeta = await client.groupMetadata(message.key.remoteJid!);
 
-        console.log(groupMeta.participants)
         for (const participant of groupMeta.participants) {
             if (participant.id == message.key.participant && participant.admin) {
                 await client.sendMessage(message.key.remoteJid!, { text: "Leaving the group chat...\nPeace out ✌️" })
