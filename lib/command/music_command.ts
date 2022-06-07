@@ -54,7 +54,9 @@ export default class MusicCommand extends ICommand {
         fs.unlink(path, () => { });
       }).addListener('error', () => {
         this.handleError(client, message, path);
-      });
+      }).on("error", () => {
+        this.handleError(client, message, path);
+      })
     } catch (err) {
       this.handleError(client, message, path);
     }
