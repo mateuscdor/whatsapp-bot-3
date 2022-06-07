@@ -20,6 +20,8 @@ export default class MusicCommand extends ICommand {
     const video = videos.filter((vid) => {
       return (vid.duration_raw.length == 7 && vid.duration_raw[0] < 3) || vid.duration_raw.length < 7
     })[0];
+    video.title = this.parseTitle(video.title);
+
     if (!video) return client.sendMessage(
       message.key.remoteJid!,
       {
@@ -60,5 +62,10 @@ export default class MusicCommand extends ICommand {
     fs.unlink(path, () => { });
     fs.unlink(path + ".mp3", () => { });
     client.sendMessage(message.key.remoteJid!, { text: "Failed to download the MP3 of this video." }, { quoted: message })
+  }
+
+  private parseTitle(title: string) {
+    const regex = /[\\,:,?,|,¿,*,<,>,",/]/g;
+    return title.replace(regex, "");
   }
 }
