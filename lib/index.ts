@@ -39,7 +39,7 @@ function registerEventHandlers() {
         message.key!.fromMe = false;
       }
 
-      if (!message.key.participant?.startsWith("972585551784") && !message.key.remoteJid?.startsWith("972585551784")) return;
+      // if (!message.key.participant?.startsWith("972585551784") && !message.key.remoteJid?.startsWith("972585551784")) return;
 
       const listeners = listenerHandler.findListeners(message);
       try {

@@ -38,31 +38,18 @@ export default class MusicCommand extends ICommand {
     const path = `./music/${video.title}.mp3`;
 
     try {
-      ytdl.default(video.url).pipe(fs.createWriteStream(path)).addListener('finish', () => {
-        Ffmpeg(path)
-          .withAudioCodec("libmp3lame")
-          .toFormat("mp3")
-          .output(path + ".mp3")
-          .on("end", () => {
-            client
-              .sendMessage(
-                message.key.remoteJid!,
-                {
-                  audio: fs.readFileSync(path + ".mp3") as WAMediaUpload,
-                  fileName: video.title + ".mp3",
-                  mimetype: "audio/mpeg",
-                },
-                { quoted: message }
-              )
-              .then((id) => {
-                fs.unlink(path, () => { });
-                fs.unlink(path + ".mp3", () => { });
-              });
-          })
-          .on('error', (err) => {
-            this.handleError(client, message, path);
-          })
-          .run();
+      ytdl.default(video.url).pipe(fs.createWriteStream(path)).addListener('finish', async () => {
+        await client
+          .sendMessage(
+            message.key.remoteJid!,
+            {
+              audio: fs.readFileSync(path) as WAMediaUpload,
+              fileName: video.title + ".mp3",
+              mimetype: "audio/mpeg",
+            },
+            { quoted: message }
+          )
+        fs.unlink(path, () => {});
       });
     } catch (err) {
       this.handleError(client, message, path);
@@ -72,6 +59,6 @@ export default class MusicCommand extends ICommand {
   private handleError(client, message, path: string) {
     fs.unlink(path, () => { });
     fs.unlink(path + ".mp3", () => { });
-    client.sendMessage(message.key.remoteJid!, { text: "Failed to download the MP3 of this video." }, {quoted: message})
+    client.sendMessage(message.key.remoteJid!, { text: "Failed to download the MP3 of this video." }, { quoted: message })
   }
 }
