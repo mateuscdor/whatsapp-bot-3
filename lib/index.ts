@@ -18,6 +18,8 @@ import CloseGCCommand from "./command/group_utils/close_gc";
 import MakeGCCommand from "./command/group_utils/make_gc";
 import GoodBotListener from "./listener/good_bot";
 import LmgtfyCommand from "./command/lmgtfy_command";
+import AddCommand from "./command/add_command";
+import KickCommand from "./command/kick_command";
 
 export const whatsappBot: WhatsAppBot = new WhatsAppBot("./session");
 ffmpeg.setFfmpegPath(ffmpegPath);
@@ -41,7 +43,7 @@ function registerEventHandlers() {
         message.key!.fromMe = false;
       }
 
-      // if (!message.key.participant?.startsWith("972585551784") && !message.key.remoteJid?.startsWith("972585551784")) return;
+      // if (message.key.participant != '972585551784@s.whatsapp.net' && message.key.remoteJid != '972585551784@s.whatsapp.net') return;
 
       const listeners = listenerHandler.findListeners(message);
       try {
@@ -67,7 +69,9 @@ function registerCommands() {
   commandHandler.registerCommand(new MakeGCCommand());
   commandHandler.registerCommand(new CloseGCCommand());
   commandHandler.registerCommand(new LmgtfyCommand());
-  // commandHandler.registerCommand(new ExecuteCommand());
+  commandHandler.registerCommand(new AddCommand());
+  commandHandler.registerCommand(new KickCommand());
+  commandHandler.registerCommand(new ExecuteCommand());
 }
 
 function registerListeners() {

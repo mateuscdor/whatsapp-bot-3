@@ -18,6 +18,6 @@ export default class LmgtfyCommand extends ICommand {
             ) ?? "";
 
         const link = url.format(base_link + query + '&iie=1')
-        client.sendMessage(message.key.remoteJid!, {text: "You couldn't Google that yourself huh?\n" + link, })
+        client.sendMessage(message.key.remoteJid!, {text: "You couldn't Google that yourself huh?\n" + link}, {quoted: message})
     }
 }

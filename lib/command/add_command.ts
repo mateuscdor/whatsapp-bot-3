@@ -1,34 +1,41 @@
 import {
     proto,
     WASocket,
-  } from "@adiwajshing/baileys";
-  import {ICommand} from "./core/command";
- import vCard from 'vcard-parser';
+} from "@adiwajshing/baileys";
+import { ICommand } from "./core/command";
+import vCard from 'vcard-parser';
+import { isGroupAdmin } from "../utils/group_utils";
 
-  
-  export default class AddCommand extends ICommand {
+
+export default class AddCommand extends ICommand {
+
     command: string = "add";
     async execute(client: WASocket, message: proto.IWebMessageInfo) {
-        const groupMeta = await client.groupMetadata(message.key.remoteJid!);
-        let isAdmin = false;
-        for (const participant of groupMeta.participants) {
-            if (participant.id == message.key.participant && participant.admin) {
-                isAdmin = true;
-            }
-        }
+        let isAdmin = isGroupAdmin(client, message.key.remoteJid ?? '', message.key.participant ?? '');
+
 
         if (!isAdmin) {
-            return client.sendMessage(message.key.remoteJid!, {text: "Only a group admin can run this command."}, {quoted: message})
+            return client.sendMessage(message.key.remoteJid!, { text: "Only a group admin can run this command." }, { quoted: message })
         }
 
-        const vcard = message.message?.extendedTextMessage?.contextInfo?.quotedMessage?.contactMessage?.vcard;
-        if (vcard) {
+        let vcards = message.message?.extendedTextMessage?.contextInfo?.quotedMessage?.contactMessage?.vcard || message.message?.extendedTextMessage?.contextInfo?.quotedMessage?.contactsArrayMessage?.contacts!.map((contact) => contact.vcard) || [];
+        const allNumbers: string[]  = []
+        if (vcards && typeof vcards == typeof "") {
+            vcards = [vcards as string]
+        }
+        
+        (vcards as string[]).forEach(async (vcard) => {
             const vc = vCard.parse(vcard)
-            const numbers = vc.map((telObject) => telObject.value + "@s.whatsapp.net")
-            await client.groupParticipantsUpdate(message.key.remoteJid!, numbers, 'add')
-            return client.sendMessage(message.key.remoteJid!, {text: "Success"}, {quoted: message})
-        }
+            const numbers = vc.tel.map((telObject) => (telObject.meta.waid + "@s.whatsapp.net"))
+             numbers.forEach(element => {
+                 allNumbers.push(element)
+             });
+        })
 
+        client.groupParticipantsUpdate(message.key.remoteJid!, allNumbers, 'add').then(() => {
+            client.sendMessage(message.key.remoteJid!, { text: "Success 🎊" }, { quoted: message })
+        }).catch((err) => {
+            client.sendMessage(message.key.remoteJid!, { text: "Failed 😢" }, { quoted: message })
+        })
     }
-  }
-  
+}
