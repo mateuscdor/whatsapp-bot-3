@@ -22,7 +22,7 @@ export default class MusicCommand extends ICommand {
       if (!vid || !vid.duration_raw) return;
 
       const durationsSeconds = this.rawTimeToSeconds(vid.duration_raw); 
-      return durationsSeconds < 60 * 10
+      return durationsSeconds < 60 * 10 && durationsSeconds > 0
     })[0];
 
     if (!video) return client.sendMessage(
@@ -71,7 +71,29 @@ export default class MusicCommand extends ICommand {
   }
 
   private rawTimeToSeconds(time: string) {
-    return (Date.parse("1970-01-01 " + time) / 1000) + 7200
+    const split = time.split(":")
+    let seconds = 0;
+    let minutes = 0
+    let hours = 0;
+
+    switch (split.length) {
+      case 1:
+        seconds = Number.parseInt(split[0]);
+        break;
+      case 2:
+        seconds = Number.parseInt(split[1]);
+        minutes = Number.parseInt(split[0]);
+        break;
+      case 3:
+        seconds = Number.parseInt(split[2]);
+        minutes = Number.parseInt(split[1]);
+        hours = Number.parseInt(split[0]);
+        break;
+      default:
+        return -1
+    }
+
+    return hours * 60 *  60 + minutes * 60 + seconds;
   }
   
   private handleError(client, message) {
