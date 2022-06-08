@@ -35,8 +35,10 @@ export default class MusicCommand extends ICommand {
 
     video.title = this.parseTitle(video.title);
     let index = 0;
-    if (this.downloading_list[video.title]) {
-      index = ++this.downloading_list[video.title];
+    console.log(this.downloading_list)
+    if (this.downloading_list[video.title] >= 0) {
+      this.downloading_list[video.title] = this.downloading_list[video.title] + 1
+      index = this.downloading_list[video.title];
     } else {
       this.downloading_list[video.title] = 0
     }
@@ -49,7 +51,7 @@ export default class MusicCommand extends ICommand {
       { quoted: message }
     );
     const path = `./music/${video.title}-${index}.mp3`;
-    
+
     ytdl.default(video.url).pipe(fs.createWriteStream(path)).addListener('finish', async () => {
       await client
         .sendMessage(
