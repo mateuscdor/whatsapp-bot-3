@@ -34,6 +34,12 @@ export default class MusicCommand extends ICommand {
     )
 
     video.title = this.parseTitle(video.title);
+    let index = 0;
+    if (this.downloading_list[video.title]) {
+      index = ++this.downloading_list[video.title];
+    } else {
+      this.downloading_list[video.title] = 0
+    }
 
     client.sendMessage(
       message.key.remoteJid!,
@@ -42,35 +48,24 @@ export default class MusicCommand extends ICommand {
       },
       { quoted: message }
     );
-    const path = `./music/${video.title}.mp3`;
+    const path = `./music/${video.title}-${index}.mp3`;
+    
+    ytdl.default(video.url).pipe(fs.createWriteStream(path)).addListener('finish', async () => {
+      await client
+        .sendMessage(
+          message.key.remoteJid!,
+          {
+            audio: fs.readFileSync(path) as WAMediaUpload,
+            fileName: video.title + ".mp3",
+            mimetype: "audio/mpeg",
+          },
+          { quoted: message }
+        )
 
-    try {
-      ytdl.default(video.url).pipe(fs.createWriteStream(path)).addListener('finish', async () => {
-        await client
-          .sendMessage(
-            message.key.remoteJid!,
-            {
-              audio: fs.readFileSync(path) as WAMediaUpload,
-              fileName: video.title + ".mp3",
-              mimetype: "audio/mpeg",
-            },
-            { quoted: message }
-          )
-        setInterval(() => {
-          fs.unlink(path, () => { });
-        }, 2000)
-      }).addListener('error', () => {
-        this.deleteFiles(video.title, path)
-        this.handleError(client, message);
-      }).on("error", () => {
-        this.deleteFiles(video.title, path)
-        this.handleError(client, message);
-      })
-    } catch (err) {
       this.deleteFiles(video.title, path)
-      this.handleError(client, message);
-    }
+    })
   }
+
 
   private rawTimeToSeconds(time: string) {
     const split = time.split(":")
