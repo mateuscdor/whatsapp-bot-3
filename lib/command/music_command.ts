@@ -9,6 +9,7 @@ import * as ytdl from 'ytdl-core';
 
 export default class MusicCommand extends ICommand {
   command: string = "music";
+  downloading_list = {}
 
   async execute(client: WASocket, message: proto.IWebMessageInfo) {
     const query =
@@ -19,7 +20,9 @@ export default class MusicCommand extends ICommand {
 
     const video = videos.filter((vid) => {
       if (!vid || !vid.duration_raw) return;
-      return (vid.duration_raw.length == 7 && vid.duration_raw[0] < 3) || vid.duration_raw.length < 7
+
+      const durationsSeconds = this.rawTimeToSeconds(vid.duration_raw); 
+      return durationsSeconds < 60 * 10
     })[0];
 
     if (!video) return client.sendMessage(
@@ -31,7 +34,6 @@ export default class MusicCommand extends ICommand {
     )
 
     video.title = this.parseTitle(video.title);
-
 
     client.sendMessage(
       message.key.remoteJid!,
@@ -56,19 +58,29 @@ export default class MusicCommand extends ICommand {
           )
         fs.unlink(path, () => { });
       }).addListener('error', () => {
-        this.handleError(client, message, path);
+        this.deleteFiles(video.title, path)
+        this.handleError(client, message);
       }).on("error", () => {
-        this.handleError(client, message, path);
+        this.deleteFiles(video.title, path)
+        this.handleError(client, message);
       })
     } catch (err) {
-      this.handleError(client, message, path);
+      this.deleteFiles(video.title, path)
+      this.handleError(client, message);
     }
   }
 
-  private handleError(client, message, path: string) {
+  private rawTimeToSeconds(time: string) {
+    return (Date.parse("1970-01-01 " + time) / 1000) + 7200
+  }
+  
+  private handleError(client, message) {
+    client.sendMessage(message.key.remoteJid!, { text: "Failed to download the MP3 of this video." }, { quoted: message })
+  }
+
+  private deleteFiles(title: string, path: string) {
     fs.unlink(path, () => { });
     fs.unlink(path + ".mp3", () => { });
-    client.sendMessage(message.key.remoteJid!, { text: "Failed to download the MP3 of this video." }, { quoted: message })
   }
 
   private parseTitle(title: string) {
