@@ -18,6 +18,7 @@ export default class MusicCommand extends ICommand {
     const videos = await yt.search(query)
 
     const video = videos.filter((vid) => {
+      if (!vid || !vid.duration_raw) return;
       return (vid.duration_raw.length == 7 && vid.duration_raw[0] < 3) || vid.duration_raw.length < 7
     })[0];
     video.title = this.parseTitle(video.title);
