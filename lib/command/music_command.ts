@@ -21,7 +21,7 @@ export default class MusicCommand extends ICommand {
     const video = videos.filter((vid) => {
       if (!vid || !vid.duration_raw) return;
 
-      const durationsSeconds = this.rawTimeToSeconds(vid.duration_raw); 
+      const durationsSeconds = this.rawTimeToSeconds(vid.duration_raw);
       return durationsSeconds < 60 * 10 && durationsSeconds > 0
     })[0];
 
@@ -56,7 +56,9 @@ export default class MusicCommand extends ICommand {
             },
             { quoted: message }
           )
-        fs.unlink(path, () => { });
+        setInterval(() => {
+          fs.unlink(path, () => { });
+        }, 2000)
       }).addListener('error', () => {
         this.deleteFiles(video.title, path)
         this.handleError(client, message);
@@ -93,9 +95,9 @@ export default class MusicCommand extends ICommand {
         return -1
     }
 
-    return hours * 60 *  60 + minutes * 60 + seconds;
+    return hours * 60 * 60 + minutes * 60 + seconds;
   }
-  
+
   private handleError(client, message) {
     client.sendMessage(message.key.remoteJid!, { text: "Failed to download the MP3 of this video." }, { quoted: message })
   }
