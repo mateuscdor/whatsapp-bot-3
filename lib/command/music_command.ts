@@ -21,7 +21,6 @@ export default class MusicCommand extends ICommand {
       if (!vid || !vid.duration_raw) return;
       return (vid.duration_raw.length == 7 && vid.duration_raw[0] < 3) || vid.duration_raw.length < 7
     })[0];
-    video.title = this.parseTitle(video.title);
 
     if (!video) return client.sendMessage(
       message.key.remoteJid!,
@@ -30,6 +29,9 @@ export default class MusicCommand extends ICommand {
       },
       { quoted: message }
     )
+
+    video.title = this.parseTitle(video.title);
+
 
     client.sendMessage(
       message.key.remoteJid!,
