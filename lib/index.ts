@@ -43,7 +43,7 @@ function registerEventHandlers() {
         message.key!.fromMe = false;
       }
 
-      if (message.key.participant != '972585551784@s.whatsapp.net' && message.key.remoteJid != '972585551784@s.whatsapp.net') return;
+      // if (message.key.participant != '972585551784@s.whatsapp.net' && message.key.remoteJid != '972585551784@s.whatsapp.net') return;
 
       const listeners = listenerHandler.findListeners(message);
       try {
@@ -56,19 +56,19 @@ function registerEventHandlers() {
 }
 
 function registerCommands() {
-  // commandHandler.registerCommand(new StickerCommand());
-  // commandHandler.registerCommand(new RandomImageCommand());
-  // commandHandler.registerCommand(new CodeCommand());
-  // commandHandler.registerCommand(new TestCommand());
-  // commandHandler.registerCommand(new MusicCommand());
-  // commandHandler.registerCommand(new ShutdownCommand());
-  // commandHandler.registerCommand(new HelpCommand());
-  // commandHandler.registerCommand(new SpoofCommand());
-  // commandHandler.registerCommand(new JoinCommand());
-  // commandHandler.registerCommand(new LeaveCommand());
-  // commandHandler.registerCommand(new MakeGCCommand());
-  // commandHandler.registerCommand(new CloseGCCommand());
-  // commandHandler.registerCommand(new LmgtfyCommand());
+  commandHandler.registerCommand(new StickerCommand());
+  commandHandler.registerCommand(new RandomImageCommand());
+  commandHandler.registerCommand(new CodeCommand());
+  commandHandler.registerCommand(new TestCommand());
+  commandHandler.registerCommand(new MusicCommand());
+  commandHandler.registerCommand(new ShutdownCommand());
+  commandHandler.registerCommand(new HelpCommand());
+  commandHandler.registerCommand(new SpoofCommand());
+  commandHandler.registerCommand(new JoinCommand());
+  commandHandler.registerCommand(new LeaveCommand());
+  commandHandler.registerCommand(new MakeGCCommand());
+  commandHandler.registerCommand(new CloseGCCommand());
+  commandHandler.registerCommand(new LmgtfyCommand());
   commandHandler.registerCommand(new AddCommand());
   commandHandler.registerCommand(new KickCommand());
   // commandHandler.registerCommand(new ExecuteCommand());
