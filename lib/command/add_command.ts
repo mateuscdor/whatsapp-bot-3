@@ -5,6 +5,7 @@ import {
 import { ICommand } from "./core/command";
 import vCard from 'vcard-parser';
 import { getBotGroupLevel, getUserGroupLevel } from "../utils/group_utils";
+import { whatsappBot } from "..";
 
 
 export default class AddCommand extends ICommand {
@@ -23,23 +24,27 @@ export default class AddCommand extends ICommand {
         }
 
         let vcards = message.message?.extendedTextMessage?.contextInfo?.quotedMessage?.contactMessage?.vcard || message.message?.extendedTextMessage?.contextInfo?.quotedMessage?.contactsArrayMessage?.contacts!.map((contact) => contact.vcard) || [];
-        const allNumbers: string[]  = []
+        const allNumbers = new Set<string>();
         if (vcards && typeof vcards == typeof "") {
             vcards = [vcards as string]
         }
-        
+
         (vcards as string[]).forEach(async (vcard) => {
             const vc = vCard.parse(vcard)
             const numbers = vc.tel.map((telObject) => (telObject.meta.waid + "@s.whatsapp.net"))
-             numbers.forEach(element => {
-                 allNumbers.push(element)
-             });
+            numbers.forEach(element => {
+                allNumbers.add(element)
+            });
         })
 
-        client.groupParticipantsUpdate(message.key.remoteJid!, allNumbers, 'add').then(() => {
-            client.sendMessage(message.key.remoteJid!, { text: "Success 🎊" }, { quoted: message })
-        }).catch((err) => {
+        try {
+            for (const number of allNumbers) {
+                await client.groupParticipantsUpdate(message.key.remoteJid!, [number], 'add')
+            }
+        } catch (err) {
             client.sendMessage(message.key.remoteJid!, { text: "Failed 😢" }, { quoted: message })
-        })
+        }
+
+        client.sendMessage(message.key.remoteJid!, { text: "Success 🎊" }, { quoted: message })
     }
 }
