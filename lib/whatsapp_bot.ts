@@ -8,9 +8,10 @@ export class WhatsAppBot {
 	private saveState;
     
 	public client: WASocket | undefined | null;
-    public eventListener: BaileysEventEmitter | undefined;
+	public eventListener: BaileysEventEmitter | undefined;
+	private registerListeners: (listener: BaileysEventEmitter, client: WhatsAppBot) => void;
 
-	constructor(store_path = './session') {
+	constructor(store_path = './session', registerListeners: (listener: BaileysEventEmitter, client: WhatsAppBot) => void) {
 		this.store = makeInMemoryStore({
 			logger: P().child({ level: 'fatal', stream: 'store' })
 		});
@@ -25,7 +26,8 @@ export class WhatsAppBot {
 		this.state = state;
 		this.saveState = saveState;
 		this.client = undefined;
-        this.eventListener = undefined;
+		this.eventListener = undefined;
+		this.registerListeners = registerListeners;
 	}
 
 	public start() {
@@ -40,6 +42,7 @@ export class WhatsAppBot {
 		console.log('Client Ready!');
 		this.eventListener = this.client.ev;
 
+		this.registerListeners(this.eventListener, this);
         this.eventListener.on('connection.update', (update) => {
             const { connection, lastDisconnect } = update
 			console.log(connection)

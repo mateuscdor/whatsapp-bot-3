@@ -20,11 +20,10 @@ import GoodBotListener from "./listener/good_bot";
 import LmgtfyCommand from "./command/lmgtfy_command";
 import AddCommand from "./command/add_command";
 import KickCommand from "./command/kick_command";
+import { BaileysEventEmitter } from "@adiwajshing/baileys";
 
-export const whatsappBot: WhatsAppBot = new WhatsAppBot("./session");
+export const whatsappBot: WhatsAppBot = new WhatsAppBot("./session", registerEventHandlers);
 ffmpeg.setFfmpegPath(ffmpegPath);
-whatsappBot.start();
-registerEventHandlers();
 
 const listenerHandler = new ListenerHandler(whatsappBot.client!);
 const commandHandler = new CommandHandler(whatsappBot.client!, listenerHandler);
@@ -32,8 +31,8 @@ const commandHandler = new CommandHandler(whatsappBot.client!, listenerHandler);
 registerCommands();
 registerListeners();
 
-function registerEventHandlers() {
-  whatsappBot.eventListener?.on("messages.upsert", async (chats) => {
+function registerEventHandlers(eventListener: BaileysEventEmitter, client: WhatsAppBot) {
+  eventListener?.on("messages.upsert", async (chats) => {
     chats.messages.forEach((message) => {
       console.info('Received message')
       if (message?.key?.participant?.includes(":") ?? false) {
@@ -43,6 +42,7 @@ function registerEventHandlers() {
       if (message?.key?.fromMe) {
         message.key!.fromMe = false;
       }
+      
 
       // if (message.key.participant != '972585551784@s.whatsapp.net' && message.key.remoteJid != '972585551784@s.whatsapp.net') return;
 
