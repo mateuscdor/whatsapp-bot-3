@@ -30,7 +30,7 @@ export class WhatsAppBot {
 
 	public start() {
 		this.client = makeWASocket({
-			logger: P({ level: 'fatal' }),
+			logger: P({ level: 'debug' }),
 			printQRInTerminal: true,
 			auth: this.state,
 			browser: ["LOCAL - BOT", "Chrome", "4.0.0"],
@@ -55,6 +55,9 @@ export class WhatsAppBot {
             // console.log('connection update', update)
         })
         // listen for when the auth credentials is updated
-        this.eventListener.on('creds.update', this.saveState)
+        this.eventListener.on('creds.update', () => {
+			console.info("Credentials updated")
+			this.saveState()
+		})
 	}
 }

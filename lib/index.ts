@@ -35,6 +35,7 @@ registerListeners();
 function registerEventHandlers() {
   whatsappBot.eventListener?.on("messages.upsert", async (chats) => {
     chats.messages.forEach((message) => {
+      console.info('Received message')
       if (message?.key?.participant?.includes(":") ?? false) {
         message.key!.participant = message?.key!.participant?.split(":")[0] + '@s.whatsapp.net';
       }
@@ -45,10 +46,13 @@ function registerEventHandlers() {
 
       // if (message.key.participant != '972585551784@s.whatsapp.net' && message.key.remoteJid != '972585551784@s.whatsapp.net') return;
 
+      console.info('Finding listeners')
       const listeners = listenerHandler.findListeners(message);
+      console.info(`Found ${listeners.length} listeners`);
       try {
         listenerHandler.executeListeners(message, ...listeners);
       } catch (e) {
+        console.error(e)
         whatsappBot.client?.sendMessage(message.key.remoteJid!, {text: "*ErIRH EROROORRRR _ahhhA_HHH _ERROR!!_*"})
       }
     });
