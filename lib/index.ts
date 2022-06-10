@@ -32,7 +32,7 @@ whatsappBot.start();
 registerCommands();
 registerListeners();
 
-function registerEventHandlers(eventListener: BaileysEventEmitter, client: WhatsAppBot) {
+function registerEventHandlers(eventListener: BaileysEventEmitter, bot: WhatsAppBot) {
   eventListener?.on("messages.upsert", async (chats) => {
     chats.messages.forEach((message) => {
       console.info('Received message')
@@ -54,7 +54,7 @@ function registerEventHandlers(eventListener: BaileysEventEmitter, client: Whats
         listenerHandler.executeListeners(message, ...listeners);
       } catch (e) {
         console.error(e)
-        whatsappBot.client?.sendMessage(message.key.remoteJid!, {text: "*ErIRH EROROORRRR _ahhhA_HHH _ERROR!!_*"})
+        bot.client?.sendMessage(message.key.remoteJid!, {text: "*ErIRH EROROORRRR _ahhhA_HHH _ERROR!!_*"})
       }
     });
   });
