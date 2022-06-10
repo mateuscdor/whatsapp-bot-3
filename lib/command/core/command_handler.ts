@@ -1,4 +1,5 @@
 import {WAMessage, WASocket} from "@adiwajshing/baileys";
+import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 import {ListenerHandler} from "../../listener/core/listener_handler";
 import {ICommand} from "./command";
 import CommandListener from "./command_listener";
@@ -15,6 +16,7 @@ export class CommandHandler {
   constructor(client: WASocket, listenerHandler: ListenerHandler | undefined | null = undefined) {
     this.client = client;
 
+    console.log("CLIENT ONE - " + client);
     if (listenerHandler) {
       this.registerCommandListener(listenerHandler);
     }

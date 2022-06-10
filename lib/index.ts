@@ -24,11 +24,11 @@ import { BaileysEventEmitter } from "@adiwajshing/baileys";
 
 export const whatsappBot: WhatsAppBot = new WhatsAppBot("./session", registerEventHandlers);
 ffmpeg.setFfmpegPath(ffmpegPath);
+whatsappBot.start();
 
 const listenerHandler = new ListenerHandler(whatsappBot.client!);
 const commandHandler = new CommandHandler(whatsappBot.client!, listenerHandler);
 
-whatsappBot.start();
 registerCommands();
 registerListeners();
 
