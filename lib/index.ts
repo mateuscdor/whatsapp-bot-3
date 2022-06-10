@@ -28,6 +28,7 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 const listenerHandler = new ListenerHandler(whatsappBot.client!);
 const commandHandler = new CommandHandler(whatsappBot.client!, listenerHandler);
 
+whatsappBot.start();
 registerCommands();
 registerListeners();
 
