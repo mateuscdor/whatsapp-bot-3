@@ -4,7 +4,7 @@ import { ICommand } from "./core/command";
 export default class LeaveCommand extends ICommand {
     command: string = "gtfo";
     async execute(client: WASocket, message: proto.IWebMessageInfo) {
-        if (isJidGroup(message.key.remoteJid!)) {
+        if (!isJidGroup(message.key.remoteJid!)) {
             return client.sendMessage(
                 message.key.remoteJid!,
                 {

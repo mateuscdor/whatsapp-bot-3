@@ -15,7 +15,7 @@ export default class EveryoneTaggerListener extends IListener {
   }
 
   async execute(client: WASocket, message: proto.IWebMessageInfo) {
-    if (isJidGroup(message.key.remoteJid!)) {
+    if (!isJidGroup(message.key.remoteJid!)) {
       return client.sendMessage(
         message.key.remoteJid!,
         {

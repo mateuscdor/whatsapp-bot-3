@@ -13,7 +13,7 @@ export default class AddCommand extends ICommand {
 
     command: string = "add";
     async execute(client: WASocket, message: proto.IWebMessageInfo) {
-        if (isJidGroup(message.key.remoteJid!)) {
+        if (!isJidGroup(message.key.remoteJid!)) {
             return client.sendMessage(
                 message.key.remoteJid!,
                 {
