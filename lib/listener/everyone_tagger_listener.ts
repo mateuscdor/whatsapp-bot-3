@@ -14,6 +14,9 @@ export default class EveryoneTaggerListener extends IListener {
 
   async execute(client: WASocket, message: proto.IWebMessageInfo) {
     const group = await client.groupMetadata(message.key.remoteJid!);
+    if (group.subject.includes("גאמא")) {
+      return;
+    }
 
     const mentions = group.participants.map((participant) => participant.id);
     client.sendMessage(
