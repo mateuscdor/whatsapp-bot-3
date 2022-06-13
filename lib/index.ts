@@ -21,6 +21,7 @@ import LmgtfyCommand from "./command/lmgtfy_command";
 import AddCommand from "./command/add_command";
 import KickCommand from "./command/kick_command";
 import { BaileysEventEmitter } from "@adiwajshing/baileys";
+import GptCommand from "./command/gpt_command";
 
 export const whatsappBot: WhatsAppBot = new WhatsAppBot("./session", registerEventHandlers);
 ffmpeg.setFfmpegPath(ffmpegPath);
@@ -76,6 +77,7 @@ function registerCommands() {
   commandHandler.registerCommand(new LmgtfyCommand());
   commandHandler.registerCommand(new AddCommand());
   commandHandler.registerCommand(new KickCommand());
+  commandHandler.registerCommand(new GptCommand());
   // commandHandler.registerCommand(new ExecuteCommand());
 }
 
