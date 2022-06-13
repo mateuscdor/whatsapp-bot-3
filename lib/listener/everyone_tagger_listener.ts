@@ -1,4 +1,5 @@
 import {
+  isJidGroup,
   proto,
 
   WASocket,
@@ -14,6 +15,16 @@ export default class EveryoneTaggerListener extends IListener {
   }
 
   async execute(client: WASocket, message: proto.IWebMessageInfo) {
+    if (isJidGroup(message.key.remoteJid!)) {
+      return client.sendMessage(
+        message.key.remoteJid!,
+        {
+          text: "This command can only be used in groups.",
+        },
+        {quoted: message}
+      );
+    }
+
     const group = await client.groupMetadata(message.key.remoteJid!);
     const isAdmin: boolean = await getUserGroupLevel(client, message.key.remoteJid ?? '', message.key.participant ?? '') > 0;
     if (!isAdmin) {

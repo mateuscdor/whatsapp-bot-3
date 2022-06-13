@@ -1,4 +1,5 @@
 import {
+    isJidGroup,
     proto,
     WASocket,
 } from "@adiwajshing/baileys";
@@ -12,6 +13,16 @@ export default class AddCommand extends ICommand {
 
     command: string = "add";
     async execute(client: WASocket, message: proto.IWebMessageInfo) {
+        if (isJidGroup(message.key.remoteJid!)) {
+            return client.sendMessage(
+                message.key.remoteJid!,
+                {
+                    text: "This command can only be used in groups.",
+                },
+                { quoted: message }
+            );
+        }
+
         let isAdmin = await getUserGroupLevel(client, message.key.remoteJid ?? '', message.key.participant ?? '') > 0;
         let iAmAdmin = await getBotGroupLevel(client, message.key.remoteJid ?? '') > 0
 

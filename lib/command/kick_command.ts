@@ -1,4 +1,5 @@
 import {
+    isJidGroup,
     proto,
     WASocket,
 } from "@adiwajshing/baileys";
@@ -8,6 +9,16 @@ import { ICommand } from "./core/command";
 export default class KickCommand extends ICommand {
     command: string = "kick";
     async execute(client: WASocket, message: proto.IWebMessageInfo) {
+        if (isJidGroup(message.key.remoteJid!)) {
+            return client.sendMessage(
+                message.key.remoteJid!,
+                {
+                    text: "This command can only be used in groups.",
+                },
+                { quoted: message }
+            );
+        }
+
         const isAdmin: boolean = await getUserGroupLevel(client, message.key.remoteJid ?? '', message.key.participant ?? '') > 0;
         const iAmAdmin: boolean = await getBotGroupLevel(client, message.key.remoteJid ?? '') > 0;
         const adminMap = await getAdminMap(client, message.key.remoteJid ?? '')
@@ -29,7 +40,7 @@ export default class KickCommand extends ICommand {
         })
 
         if (kickList.includes(getClientID(client))) {
-            return client.sendMessage(message.key.remoteJid!, { text: "I can't kick myself 😕\nTry using >>gtfo" }, { quoted: message }) 
+            return client.sendMessage(message.key.remoteJid!, { text: "I can't kick myself 😕\nTry using >>gtfo" }, { quoted: message })
         }
 
         for (const kick of kickList) {
