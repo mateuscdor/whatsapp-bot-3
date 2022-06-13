@@ -3,6 +3,7 @@ import {
 
   WASocket,
 } from "@adiwajshing/baileys";
+import { getUserGroupLevel } from "../utils/group_utils";
 import {getMessageBody} from "../utils/message_utils";
 import {IListener} from "./core/listener";
 
@@ -14,9 +15,17 @@ export default class EveryoneTaggerListener extends IListener {
 
   async execute(client: WASocket, message: proto.IWebMessageInfo) {
     const group = await client.groupMetadata(message.key.remoteJid!);
-    if (group.subject.includes("גאמא")) {
-      return;
+    const isAdmin: boolean = await getUserGroupLevel(client, message.key.remoteJid ?? '', message.key.participant ?? '') > 0;
+    if (!isAdmin) {
+      client.sendMessage(
+        message.key.remoteJid!,
+        {
+          text: "Bro...\nOnly admins can use this command 😣",
+        },
+        {quoted: message}
+      );
     }
+
 
     const mentions = group.participants.map((participant) => participant.id);
     client.sendMessage(
