@@ -39,7 +39,7 @@ export default class GptCommand extends ICommand {
         }).then((response) => {
             const blank = "Couldn't think of anything\nI'm blank!";
             const text = response.data.choices ? response.data.choices[0].text ?? blank : blank;
-            client.sendMessage(message.key.remoteJid!, { text: text }, { quoted: message })
+            client.sendMessage(message.key.remoteJid!, { text: text.trim() }, { quoted: message })
         }).catch((err) => {
             client.sendMessage(message.key.remoteJid!, { text: "That's way too long for me" }, { quoted: message })
         })

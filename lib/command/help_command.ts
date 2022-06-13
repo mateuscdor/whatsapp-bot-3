@@ -12,6 +12,7 @@ export default class HelpCommand extends ICommand {
         helpMessage += ">>join <group link> - adds the bot to a group (you can send the bot a private message)\n"
         helpMessage += '>>spoof <tag> "<spoofed message>" "<user message>"\n>>Lmgtfy <query> - condescending way to explain Google to someone\n'
         helpMessage += '>>add - Reply to a message with a contact to add that contact\n>>kick @person @person2 - Kick people from group\n'
+        helpMessage += '>>gpt <query> - Have an AI tell you something\n'
         helpMessage += 'מקווה שעזרתי ✌\n~bot'
 
         client.sendMessage(message.key.remoteJid!, { text: helpMessage }, { quoted: message })
