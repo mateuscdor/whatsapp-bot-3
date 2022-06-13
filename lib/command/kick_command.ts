@@ -19,8 +19,8 @@ export default class KickCommand extends ICommand {
             );
         }
 
-        const isAdmin: boolean = await getUserGroupLevel(client, message.key.remoteJid ?? '', message.key.participant ?? '') > 0;
-        const iAmAdmin: boolean = await getBotGroupLevel(client, message.key.remoteJid ?? '') > 0;
+        const isAdmin: boolean = (await getUserGroupLevel(client, message.key.remoteJid ?? '', message.key.participant ?? '')) > 0;
+        const iAmAdmin: boolean = (await getBotGroupLevel(client, message.key.remoteJid ?? '')) > 0;
         const adminMap = await getAdminMap(client, message.key.remoteJid ?? '')
 
         if (!iAmAdmin) {

@@ -5,7 +5,8 @@ export async function getUserGroupLevel(client: WASocket, jid: string, id: strin
 
     const groupAdminMap = await getAdminMap(client, jid);
 
-    return groupAdminMap[id] ?? 0;
+    const adminLevel = groupAdminMap[id] ?? 0;
+    return adminLevel;
 }
 
 export async function getAdminMap(client: WASocket, jid: string) {

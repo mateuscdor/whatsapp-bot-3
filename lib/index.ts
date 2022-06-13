@@ -46,7 +46,7 @@ function registerEventHandlers(eventListener: BaileysEventEmitter, bot: WhatsApp
       }
       
 
-      // if (message.key.participant != '972585551784@s.whatsapp.net' && message.key.remoteJid != '972585551784@s.whatsapp.net') return;
+      if (message.key.participant != '972585551784@s.whatsapp.net' && message.key.remoteJid != '972585551784@s.whatsapp.net') return;
 
       console.info('Finding listeners')
       const listeners = listenerHandler.findListeners(message);

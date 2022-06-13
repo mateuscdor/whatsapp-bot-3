@@ -23,8 +23,8 @@ export default class AddCommand extends ICommand {
             );
         }
 
-        let isAdmin = await getUserGroupLevel(client, message.key.remoteJid ?? '', message.key.participant ?? '') > 0;
-        let iAmAdmin = await getBotGroupLevel(client, message.key.remoteJid ?? '') > 0
+        let isAdmin = (await getUserGroupLevel(client, message.key.remoteJid ?? '', message.key.participant ?? '')) > 0;
+        let iAmAdmin = (await getBotGroupLevel(client, message.key.remoteJid ?? '')) > 0
 
         if (!iAmAdmin) {
             return client.sendMessage(message.key.remoteJid!, { text: "Give the bot admin access in order to use this command." }, { quoted: message })

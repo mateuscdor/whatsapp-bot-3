@@ -26,9 +26,9 @@ export default class EveryoneTaggerListener extends IListener {
     }
 
     const group = await client.groupMetadata(message.key.remoteJid!);
-    const isAdmin: boolean = await getUserGroupLevel(client, message.key.remoteJid ?? '', message.key.participant ?? '') > 0;
+    const isAdmin: boolean = (await getUserGroupLevel(client, message.key.remoteJid ?? '', message.key.participant ?? '')) > 0;
     if (!isAdmin) {
-      client.sendMessage(
+      return client.sendMessage(
         message.key.remoteJid!,
         {
           text: "Bro...\nOnly admins can use this command 😣",
